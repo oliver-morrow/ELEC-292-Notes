@@ -1,12 +1,147 @@
 1. Data set joins (Lab 3)
 1. Writing procedures in SQL (Lab 3)
-2. Implementing gradient descent for logistic regression
-3. Understanding ROC, AUC, sensitivity, specificity, and classifier thresholding
+2. [[#Gradient Descent For Logistic Regression]]
+3. Understanding [[#ROC Curve and AUC]], [[#Sensitivity, Recall, or true positive rate]], [[#Specificity]], and classifier thresholding
 4. Understanding the role of variance in PCA and difference between PCA and TSNE
 5. Lab-controlled data, In-the-wild data, mixed methods of data labelling, web scraping, crowdsourcing, automated data labelling, Test-Driven Development (TDD), Technological disruption & examples
 6. Learn how to use sample and hold as well as zero mean replacement for imputing missing value.
 7. Important thing to remember about normalization: When features in a dataset have vastly different scales, models can become biased towards the features with larger magnitudes. Normalization adjusts the scale of data so that different features contribute equally to the analysis or model training, thus removing the bias of large numbers.
 8. Effects of larger and smaller window size of moving average on a signal.
+# Data set joins
+# Writing Procedures in SQL
+## SQL Syntax
+SQL's syntax is made up of 4 languages:
+- [[#DDL]]: Data Definition Language
+- [[#DML]]: Data Manipulation Language
+- [[#DCL]]: Data Control Language
+- [[#TCL]]: Transaction Control Language
+### DDL
+- Includes a set of statements which allow you to define or modify data structures and objects, like tables
+- Includes the following commands:
+	- CREATE
+	- ALTER
+	- DROP
+	- RENAME
+	- TRUNCATE
+### DML
+- The statement categorized under DML allow the user to manipulate data in the tables of a database.
+- Includes the following commands:
+	- SELECT
+	- INSERT
+	- UPDATE
+	- DELETE
+### DCL
+- DCL tries to manage the rights that users have in databases.
+- The following commands:
+	- GRANT
+	- REVOKE
+### TCL
+- Aims to manage transactions/changes made to the database.
+- It includes:
+	- COMMIT
+	- ROLLBACK
+	- SAVEPOINT
+### DQL
+- It is used to query or retrieve data from a table in the database.
+- The main command is:
+	- SELECT
+## Why *relational* databases?
+- A relational database stores data in tables with rows and columns, and allows relationships to be established between tables, while a regular database may store data in a variety of ways without the ability to establish relationships between data.
+- Very time-consuming to perform complex queries on tables with many fields and records.
+- Solving this, we use relational databases!
+## How to adopt a database?
+1. Design the database:
+	- We consider our needs and resources
+	- We use an entity-relationship diagram
+2. Create the dataset using DDL
+3. Manipulate it using DML
+## Relational schemas
+- Relational schemas are diagrams used to describe a database
+- We generally use them to design and start coding our database
+- ![[Pasted image 20240415130259.png|400]]
+- ![[Pasted image 20240415130310.png|300]]
+### Primary Key and Foreign Key
+**Primary Key** is a column or possible a set of columns whose values:
+- exist (NOT NULL);
+- are unique for each table
+
+**Foreign key** identifies the relationship between tables.
+### Cardinality Constraints
+![[Pasted image 20240415130521.png|400]]
+## Data types in SQL
+### String data types
+
+| Name               | Syntax    | Example        |
+| ------------------ | --------- | -------------- |
+| Character          | CHAR      | CHAR(10)       |
+| Variable character | VARCHAR() | VARCHAR(5)     |
+| ENUM               | ENUM()    | ENUM('M', 'F') |
+### Numeric data types
+
+| Name           | Syntax                                    | Example      |
+| -------------- | ----------------------------------------- | ------------ |
+| Integer        | TINYINT, SMALLINT, MEDIUMINT, INT, BIGINT |              |
+| Fixed point    | DECIMAL                                   | DECIMAL(5,3) |
+| Floating point | FLOAT, DOUBLR                             | FLOAT(5,3)   |
+### Date, time, and files
+| Name                | Syntax      | Example             |
+| ------------------- | ----------- | ------------------- |
+| Date                | DATE        | 2022-10-26          |
+| Date time           | DATETIME    | 2022-10-26 12:38:01 |
+| TIMESTAMP           | TIMESTAMP() | 1879812480          |
+| Binary large object | BLOB        |                     |
+## Creating a database in SQL
+```sql
+create database if not exists onq;
+USE onq;
+
+CREATE TABLE students (
+	student_id INT NOT NULL,
+	first_name VARCHAR(255),
+	family_name VARCHAR(255),
+	phone CHAR(12),
+	major_code INT,
+	supervisor_code INT,
+	PRIMARY KEY (student_id)
+)
+```
+### Constraints in SQL
+- **NOT NULL**: If a field is specified as NOT NULL, you cannot insert information in that field unless you're inserting a proper value.
+- **AUTO_INCREMENT**: Automatically increase the value of a field when you insert information.
+- **PRIMARY KEY**: Illustrates the primary key of a table.
+- **FOREIGN KEY**: Highlights the foreign key of a table.
+
+**ALTER**: Adding a Unique Key
+```sql
+ALTER TABLE students
+ADD UNIQUE KEY(phone);
+```
+**ALTER**: Adding a column to a table
+```sql
+ALTER TABLE students
+ADD COLUMN gender ENUM('M', 'F') AFTER family_name;
+```
+**INSERT**: Adding a record to the table
+```sql
+INSERT INTO students (student_id, first_name, family_name, gender, phone, major_code, supervisor_code)
+VALUES(20201456, 'Mike', 'Smith', 'M', '+1 343 333 ****', 10, 14);
+```
+## SELECT statement
+- We use SELECT the most in SQL statements.
+- It is used to retrieve information from SQL objects, and query data from a database.
+- The simplest form of SELECT is:
+	- `SELECT column_names FROM table_name;`
+**SELECT ... WHERE**:
+```sql
+SELECT * FROM employees WHERE first_name = 'khalid' OR first_name = 'Maris';
+```
+Note: `*` means all employees.
+Using patterns with **SELECT**:
+```sql
+SELECT * FROM employees WHERE first_name LIKE('%mo');
+```
+Note: `%mo` searches for names ending in `mo`.
+
 # Gradient Descent For Logistic Regression
 w2x2A regression model can be characterized as: (assuming $x\in \mathrm{R}$) $$f(x,w)=w_{0}+w_{1}x+w_{2}x^2+\dots+w_{m}x^2=\sum_{j=0}^{m}w_{j}x^j$$
 If $m=1$, then we have a linear regressor (linear regression model). Otherwise, it is non-linear. In non-linear cases, we can have term like.
