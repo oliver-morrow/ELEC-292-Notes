@@ -30,6 +30,23 @@ ON students.student_id = majors.student_id;
 # ROC and AUC
 3. Given the data below, calculate true positive rate (tpr) and false positive rate (fpr) at different thresholds. Draw the resulting receiver operating characteristic (ROC) curve and calculate the area under curve (AUC). (labels: 1: circle, 0: triangle)
 ![[Pasted image 20240415154422.png]]
+**Process:**
+
+| Threshold | TPR | FPR |
+| --------- | --- | --- |
+| inf       | 0   | 0   |
+| 0.6       | 1/4 | 0   |
+| 0.5       | 2/4 | 0   |
+| 0.4       | 3/4 | 0   |
+| 0.3       | 3/4 | 1/2 |
+| 0.2       | 3/4 | 1   |
+| 0.1       | 1   | 1   |
+**Plotting:**
+X-axis: FPR
+Y-axis: TPR
+Area: Calculate based on the graph, in this case, it is a rectangle of width (1) and height (0.75), which yields 0.75x1 = 0.75 = 75%
+
+Therefore, the AUC is 75%.
 
 # PCA
 4. Suppose that you are assigned a task to apply principal component analysis (PCA) on a 2D dataset for dimension reduction. You do the calculations and find out that the first principal component is positioned at an angle of 5 degrees contraclockwise from the x-axis. What can you infer about the variance of the dataset along x and y axes?
