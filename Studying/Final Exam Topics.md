@@ -1,13 +1,21 @@
-1. Data set joins (Lab 3)
-1. Writing procedures in SQL (Lab 3)
+1. [[#Data set joins]] (Lab 3)
+1. [[#Writing Procedures in SQL]] (Lab 3)
 2. [[#Gradient Descent For Logistic Regression]]
 3. Understanding [[#ROC Curve and AUC]], [[#Sensitivity, Recall, or true positive rate]], [[#Specificity]], and classifier thresholding
-4. Understanding the role of variance in PCA and difference between PCA and TSNE
+4. Understanding the role of variance in PCA and difference between [[#Principle Component Analysis (PCA)]] and [[#t-Distributed Stochastic Neighbourhood Embedding (t-SNE)]]
 5. Lab-controlled data, In-the-wild data, mixed methods of data labelling, web scraping, crowdsourcing, automated data labelling, Test-Driven Development (TDD), Technological disruption & examples
-6. Learn how to use sample and hold as well as zero mean replacement for imputing missing value.
-7. Important thing to remember about normalization: When features in a dataset have vastly different scales, models can become biased towards the features with larger magnitudes. Normalization adjusts the scale of data so that different features contribute equally to the analysis or model training, thus removing the bias of large numbers.
-8. Effects of larger and smaller window size of moving average on a signal.
+6. [[#Zero mean replacement & Sample and hold]]
+7. Important thing to remember about [[#Normalization]]: When features in a dataset have vastly different scales, models can become biased towards the features with larger magnitudes. Normalization adjusts the scale of data so that different features contribute equally to the analysis or model training, thus removing the bias of large numbers.
+8. Effects of larger and smaller [[#Window size of moving average]] on a signal.
 # Data set joins
+## INNER JOIN
+`INNER JOIN` returns records that have matching values in both tables.
+## LEFT (OUTER) JOIN
+`LEFT JOIN` returns all records from the left table, and the matched records from the right table.
+## RIGHT (OUTER) JOIN
+`RIGHT JOIN` returns all records from the right table, and the matched records from the left table.
+## FULL (OUTER) JOIN
+`FULL JOIN` returns all records when there is a match in either the left or right table.
 # Writing Procedures in SQL
 ## SQL Syntax
 SQL's syntax is made up of 4 languages:
@@ -220,5 +228,31 @@ $$\text{FPR}=\frac{FP}{FP+TN}$$
 **AUC**: Area under curve of the ROC curve.
 
 The goal is to choose a model with the highest AUC possible.
-
-
+# Zero mean replacement & Sample and hold
+## Zero mean replacement
+Missing values are replaced with zero (0).
+- This method is straightforward and can be particularly useful in datasets where zero represents a meaningful baseline or absence of activity. However, it has its limitations, such as potentially distorting the statistical properties of the dataset, like mean, variance, and correlation with other variables​​.
+## Sample and hold
+Missing values are replaced with the last non-missing value.
+- It assumes that the best prediction for a missing value is the most recently available data point. This approach can be particularly useful when data points are not expected to change dramatically over short intervals, thereby preserving the continuity and trends in the data more effectively than zero replacement.
+- However, like any imputation method, it has its drawbacks. If the assumption that the data remains stable between observations does not hold, this method can introduce bias. Also, if the last observed value is itself an outlier, it may skew the data further​​.
+# Window size of moving average
+The window size, denoted as N, where N is usually an odd number, is crucial because it determines the smoothness of the output signal. A larger window size will result in a smoother signal by averaging more points within the window, thus reducing noise effectively. However, increasing the window size can also lead to the loss of important signal details because it averages out the rapid changes in the data​​.
+# Normalization
+Normalization is a critical preprocessing step in data handling, especially when dealing with variables that range in different scales. The process of normalization involves adjusting the data so that its range or distribution falls within a specific scale, typically between 0 and 1, or to have a zero mean and unit variance (standard score or z-score normalization).
+## Purpose
+1. **Equal Scaling:** Normalization ensures that each input variable contributes equally to the analysis by removing the bias due to different scales, often necessary for machine learning algorithms.
+2. **Improved Performance:** Algorithms that depend heavily on the distance between data points, like k-means clustering or k-nearest neighbours, perform better when the data is normalized.
+3. **Faster Convergence:** In neural networks and gradient-based optimization algorithms, normalization can lead to faster convergence during training.
+## Techniques
+- **Min-Max Scaling:** Transforms features by scaling each feature to a given range, usually 0 to 1, or -1 to 1. $$x'=\frac{x-min(x)}{max(x)-min(x)}$$
+- **Z-Score Normalization (Standardization):** Standardization involves rescaling the features so that they’ll have the properties of a standard normal distribution with a mean of zero and a standard deviation of one. $$x'=\frac{x-\mu}{\sigma}$$
+# t-Distributed Stochastic Neighbourhood Embedding (t-SNE)
+- Unlike PCA, which tries to preserve global structure and may lose local structure, t-SNE preserves both local and global structure.
+- The intuition behind t-SNE is that it tries to match the conditional data distributions in high and low dimensions within a neighbourhood.
+# Principle Component Analysis (PCA)
+Assume we want to reduce the dimension of a plot from 2 to 1. One approach could be to remove one axis, e.g., y, which we will only keep x values.
+- Removing the axis in this case loses us far too much information.
+- In statistics and ML, the variance of samples can be regarded as the amount of **information** the samples are carrying. Therefore, the higher the variance, the more information we have. The equation for variance is: $$\sigma^2=\frac{{\sum_{i=1}^n(x_{i}-\mu)^2}}{n}$$
+- Looking back at the original figure, what other 1D projection would retain more information than just removing y?
+- PCA tries to find a coordinate system on which if you project the data, you obtain the highest possible variance.
